@@ -3,11 +3,9 @@ package pages;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
-public class RadioButtonPage {
-
-    private final WebDriver driver;
+public class RadioButtonPage extends BasePage {
 
     @FindBy(css = "label[for='yesRadio']")
     private WebElement yesRadio;
@@ -15,30 +13,28 @@ public class RadioButtonPage {
     @FindBy(css = "label[for='impressiveRadio']")
     private WebElement impressiveRadio;
 
-    @FindBy(css = "label[for='noRadio']")
-    private WebElement noRadio;
-
     @FindBy(css = ".text-success")
     private WebElement successText;
 
     public RadioButtonPage(WebDriver driver) {
-        this.driver = driver;
-        PageFactory.initElements(driver, this);
+        super(driver);
     }
 
     public void navigateTo() {
-        driver.get("https://demoqa.com/radio-button");
+        navigateTo("https://demoqa.com/radio-button");
+        wait.until(ExpectedConditions.elementToBeClickable(yesRadio));
     }
 
     public void selectYes() {
-        yesRadio.click();
+        safeClick(yesRadio);
     }
 
     public void selectImpressive() {
-        impressiveRadio.click();
+        safeClick(impressiveRadio);
     }
 
     public String getSuccessText() {
+        wait.until(ExpectedConditions.visibilityOf(successText));
         return successText.getText();
     }
 }

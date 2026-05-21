@@ -4,15 +4,9 @@ import org.openqa.selenium.Alert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.time.Duration;
-
-public class AlertsPage {
-
-    private final WebDriver driver;
+public class AlertsPage extends BasePage {
 
     @FindBy(id = "alertButton")
     private WebElement simpleAlertButton;
@@ -31,29 +25,28 @@ public class AlertsPage {
     private WebElement promptResult;
 
     public AlertsPage(WebDriver driver) {
-        this.driver = driver;
-        PageFactory.initElements(driver, this);
+        super(driver);
     }
 
     public void navigateTo() {
-        driver.get("https://demoqa.com/alerts");
+        navigateTo("https://demoqa.com/alerts");
+        wait.until(ExpectedConditions.elementToBeClickable(simpleAlertButton));
     }
 
     public void clickSimpleAlert() {
-        simpleAlertButton.click();
+        safeClick(simpleAlertButton);
     }
 
     public void clickConfirmAlert() {
-        confirmAlertButton.click();
+        safeClick(confirmAlertButton);
     }
 
     public void clickPromptAlert() {
-        promptAlertButton.click();
+        safeClick(promptAlertButton);
     }
 
     public String getAlertText() {
-        Alert alert = waitForAlert();
-        return alert.getText();
+        return waitForAlert().getText();
     }
 
     public void acceptAlert() {
@@ -71,15 +64,16 @@ public class AlertsPage {
     }
 
     public String getConfirmResult() {
+        wait.until(ExpectedConditions.visibilityOf(confirmResult));
         return confirmResult.getText();
     }
 
     public String getPromptResult() {
+        wait.until(ExpectedConditions.visibilityOf(promptResult));
         return promptResult.getText();
     }
 
     private Alert waitForAlert() {
-        return new WebDriverWait(driver, Duration.ofSeconds(5))
-                .until(ExpectedConditions.alertIsPresent());
+        return wait.until(ExpectedConditions.alertIsPresent());
     }
 }

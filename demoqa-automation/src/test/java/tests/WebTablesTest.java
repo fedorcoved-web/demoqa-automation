@@ -29,4 +29,17 @@ public class WebTablesTest extends BaseTest {
         Assert.assertFalse(page.isNamePresentInTable("Cierra"),
                 "Deleted entry 'Cierra' should no longer be visible in the table");
     }
+
+    @Test(description = "Edit salary of existing row and verify change")
+    public void testEditRow() {
+        WebTablesPage page = new WebTablesPage(getDriver());
+        page.navigateTo();
+        page.searchFor("Cierra");
+        page.clickEditButtons();        // відкрити форму редагування
+        page.editSalary("11000");       // змінити зарплату
+        page.submitForm();              // підтвердити
+        Assert.assertTrue(page.isNamePresentInTable("11000"),
+                "Updated salary should be visible in table");
+    }
+
 }

@@ -1,20 +1,14 @@
 package pages;
 
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.time.Duration;
 import java.util.List;
 
-public class WebTablesPage {
-
-    private final WebDriver driver;
+public class WebTablesPage extends BasePage {
 
     @FindBy(id = "addNewRecordButton")
     private WebElement addButton;
@@ -50,20 +44,25 @@ public class WebTablesPage {
     @FindBy(css = "span[title='Delete']")
     private List<WebElement> deleteButtons;
 
+    @FindBy(css = "span[id='edit-record-1'] svg path")
+    private List<WebElement> editButtons;
+
     public WebTablesPage(WebDriver driver) {
-        this.driver = driver;
-        PageFactory.initElements(driver, this);
+        super(driver);
     }
 
     public void navigateTo() {
-        driver.get("https://demoqa.com/webtables");
+        navigateTo("https://demoqa.com/webtables");
+        wait.until(ExpectedConditions.elementToBeClickable(addButton));
     }
 
     public void clickAddButton() {
-        addButton.click();
-        // wait for the registration modal to be visible before interacting with its fields
-        new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(ExpectedConditions.visibilityOf(firstNameInput));
+        safeClick(addButton);
+        wait.until(ExpectedConditions.visibilityOf(firstNameInput));
+    }
+
+    public void clickEditButtons() {
+        editButtons.get(0).click();
     }
 
     public void fillRegistrationForm(String firstName, String lastName, String email,
@@ -76,12 +75,14 @@ public class WebTablesPage {
         departmentInput.sendKeys(department);
     }
 
+    public void editSalary(String salary) {
+        salaryInput.sendKeys(salary);
+    }
+
     public void submitForm() {
         // JS click bypasses any ad overlay covering the modal's submit button
-        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", submitButton);
-        // wait for the modal to close before asserting table state
-        new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(ExpectedConditions.invisibilityOf(firstNameInput));
+        jsClick(submitButton);
+        wait.until(ExpectedConditions.invisibilityOf(firstNameInput));
     }
 
     public void searchFor(String term) {
@@ -94,8 +95,7 @@ public class WebTablesPage {
 
     public boolean waitForNameInTable(String firstName) {
         try {
-            new WebDriverWait(driver, Duration.ofSeconds(10))
-                    .until(d -> tableRows.stream().anyMatch(row -> row.getText().contains(firstName)));
+            wait.until(d -> tableRows.stream().anyMatch(row -> row.getText().contains(firstName)));
             return true;
         } catch (TimeoutException e) {
             return false;

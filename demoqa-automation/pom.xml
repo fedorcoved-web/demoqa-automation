@@ -17,6 +17,7 @@
         <testng.version>7.9.0</testng.version>
         <extentreports.version>5.1.1</extentreports.version>
         <webdrivermanager.version>5.7.0</webdrivermanager.version>
+        <rest-assured.version>5.4.0</rest-assured.version>
     </properties>
 
     <dependencies>
@@ -42,6 +43,18 @@
             <groupId>io.github.bonigarcia</groupId>
             <artifactId>webdrivermanager</artifactId>
             <version>${webdrivermanager.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <version>${rest-assured.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>json-path</artifactId>
+            <version>${rest-assured.version}</version>
         </dependency>
     </dependencies>
 

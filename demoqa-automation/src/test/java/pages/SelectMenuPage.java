@@ -3,26 +3,27 @@ package pages;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 
-public class SelectMenuPage {
-
-    private final WebDriver driver;
+public class SelectMenuPage extends BasePage {
 
     @FindBy(id = "oldSelectMenu")
     private WebElement oldSelectMenu;
 
     public SelectMenuPage(WebDriver driver) {
-        this.driver = driver;
-        PageFactory.initElements(driver, this);
+        super(driver);
     }
 
     public void navigateTo() {
-        driver.get("https://demoqa.com/select-menu");
+        navigateTo("https://demoqa.com/select-menu");
+        wait.until(ExpectedConditions.elementToBeClickable(oldSelectMenu));
     }
 
     public void selectFromOldMenu(String visibleText) {
+        dismissAds();
+        scrollIntoView(oldSelectMenu);
+        wait.until(ExpectedConditions.elementToBeClickable(oldSelectMenu));
         new Select(oldSelectMenu).selectByVisibleText(visibleText);
     }
 

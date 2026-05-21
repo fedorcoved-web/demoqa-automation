@@ -3,11 +3,9 @@ package pages;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
-public class TextBoxPage {
-
-    private final WebDriver driver;
+public class TextBoxPage extends BasePage {
 
     @FindBy(id = "userName")
     private WebElement fullNameInput;
@@ -37,12 +35,12 @@ public class TextBoxPage {
     private WebElement outputPermanentAddress;
 
     public TextBoxPage(WebDriver driver) {
-        this.driver = driver;
-        PageFactory.initElements(driver, this);
+        super(driver);
     }
 
     public void navigateTo() {
-        driver.get("https://demoqa.com/text-box");
+        navigateTo("https://demoqa.com/text-box");
+        wait.until(ExpectedConditions.visibilityOf(fullNameInput));
     }
 
     public void fillForm(String name, String email, String currentAddress, String permanentAddress) {
@@ -53,10 +51,11 @@ public class TextBoxPage {
     }
 
     public void submit() {
-        submitButton.click();
+        safeClick(submitButton);
     }
 
     public String getOutputName() {
+        wait.until(ExpectedConditions.visibilityOf(outputName));
         return outputName.getText();
     }
 

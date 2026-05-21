@@ -1,19 +1,12 @@
 package pages;
 
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.time.Duration;
-
-public class PracticeFormPage {
-
-    private final WebDriver driver;
+public class PracticeFormPage extends BasePage {
 
     @FindBy(id = "firstName")
     private WebElement firstNameInput;
@@ -46,12 +39,12 @@ public class PracticeFormPage {
     private WebElement closeModalButton;
 
     public PracticeFormPage(WebDriver driver) {
-        this.driver = driver;
-        PageFactory.initElements(driver, this);
+        super(driver);
     }
 
     public void navigateTo() {
-        driver.get("https://demoqa.com/automation-practice-form");
+        navigateTo("https://demoqa.com/automation-practice-form");
+        wait.until(ExpectedConditions.visibilityOf(firstNameInput));
     }
 
     public void fillFirstName(String name) {
@@ -67,7 +60,7 @@ public class PracticeFormPage {
     }
 
     public void selectMaleGender() {
-        maleGenderRadio.click();
+        safeClick(maleGenderRadio);
     }
 
     public void fillMobile(String mobile) {
@@ -75,7 +68,7 @@ public class PracticeFormPage {
     }
 
     public void selectSportsHobby() {
-        sportsHobbyCheckbox.click();
+        safeClick(sportsHobbyCheckbox);
     }
 
     public void fillCurrentAddress(String address) {
@@ -83,15 +76,12 @@ public class PracticeFormPage {
     }
 
     public void submit() {
-        JavascriptExecutor js = (JavascriptExecutor) driver;
-        js.executeScript("arguments[0].scrollIntoView(true);", submitButton);
-        js.executeScript("arguments[0].click();", submitButton);
+        jsClick(submitButton);
     }
 
     public boolean isModalDisplayed() {
         try {
-            new WebDriverWait(driver, Duration.ofSeconds(10))
-                    .until(ExpectedConditions.visibilityOf(modalTitle));
+            wait.until(ExpectedConditions.visibilityOf(modalTitle));
             return true;
         } catch (TimeoutException e) {
             return false;
@@ -103,6 +93,6 @@ public class PracticeFormPage {
     }
 
     public void closeModal() {
-        closeModalButton.click();
+        safeClick(closeModalButton);
     }
 }

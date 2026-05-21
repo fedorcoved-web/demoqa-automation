@@ -4,13 +4,11 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.time.Duration;
 
-public class DragAndDropPage {
-
-    private final WebDriver driver;
+public class DragAndDropPage extends BasePage {
 
     @FindBy(id = "draggable")
     private WebElement draggable;
@@ -19,15 +17,18 @@ public class DragAndDropPage {
     private WebElement droppable;
 
     public DragAndDropPage(WebDriver driver) {
-        this.driver = driver;
-        PageFactory.initElements(driver, this);
+        super(driver);
     }
 
     public void navigateTo() {
-        driver.get("https://demoqa.com/droppable");
+        navigateTo("https://demoqa.com/droppable");
+        wait.until(ExpectedConditions.elementToBeClickable(draggable));
     }
 
     public void dragAndDrop() {
+        dismissAds();
+        scrollIntoView(draggable);
+        wait.until(ExpectedConditions.elementToBeClickable(draggable));
         // Actions.dragAndDrop() is unreliable in Chrome 100+.
         // Explicit clickAndHold → moveToElement → release is more stable.
         new Actions(driver)

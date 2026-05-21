@@ -3,14 +3,10 @@ package pages;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
-import java.util.ArrayList;
-import java.util.List;
 
-public class BrowserWindowsPage {
-
-    private final WebDriver driver;
+public class BrowserWindowsPage extends BasePage {
 
     @FindBy(id = "tabButton")
     private WebElement newTabButton;
@@ -22,28 +18,41 @@ public class BrowserWindowsPage {
     private WebElement sampleHeading;
 
     public BrowserWindowsPage(WebDriver driver) {
-        this.driver = driver;
-        PageFactory.initElements(driver, this);
+        super(driver);
     }
 
     public void navigateTo() {
-        driver.get("https://demoqa.com/browser-windows");
+        navigateTo("https://demoqa.com/browser-windows");
+        wait.until(ExpectedConditions.elementToBeClickable(newTabButton));
     }
 
     public void clickNewTab() {
-        newTabButton.click();
+        safeClick(newTabButton);
     }
 
     public void switchToNewTab() {
-        List<String> handles = new ArrayList<>(driver.getWindowHandles());
-        driver.switchTo().window(handles.get(handles.size() - 1));
+        wait.until(ExpectedConditions.numberOfWindowsToBe(2));
+        String original = driver.getWindowHandle();
+        for (String handle : driver.getWindowHandles()) {
+            if (!handle.equals(original)) {
+                driver.switchTo().window(handle);
+                break;
+            }
+        }
     }
 
     public String getCurrentUrl() {
+        // Block until the new tab's document is at least interactive so
+        // ChromeDriver's HTTP response doesn't time out mid-page-load.
+        wait.until(d -> {
+            String state = (String) js.executeScript("return document.readyState");
+            return "interactive".equals(state) || "complete".equals(state);
+        });
         return driver.getCurrentUrl();
     }
 
     public String getSampleHeadingText() {
+        wait.until(ExpectedConditions.visibilityOf(sampleHeading));
         return sampleHeading.getText();
     }
 }

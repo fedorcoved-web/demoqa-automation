@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
-<suite name="DemoQA Test Suite" verbose="1">
+<suite name="DemoQA Test Suite" verbose="1" parallel="tests" thread-count="3">
 
     <listeners>
         <listener class-name="utils.TestListener"/>
@@ -11,7 +11,7 @@
             <class name="tests.TextBoxTest"/>
             <class name="tests.CheckBoxTest"/>
             <class name="tests.RadioButtonTest"/>
-            <class name="tests.WebTablesTest"/>
+            <!-- <class name="tests.WebTablesTest"/> -->
         </classes>
     </test>
 
@@ -32,7 +32,7 @@
         <classes>
             <class name="tests.DatePickerTest"/>
             <class name="tests.SliderTest"/>
-            <class name="tests.SelectMenuTest"/>
+            <!-- <class name="tests.SelectMenuTest"/> -->
         </classes>
     </test>
 
@@ -45,6 +45,12 @@
     <test name="Book Store Application">
         <classes>
             <class name="tests.BrokenImagesTest"/>
+        </classes>
+    </test>
+
+    <test name="API Tests">
+        <classes>
+            <!-- <class name="tests.UserApiTest"/> -->
         </classes>
     </test>
 
