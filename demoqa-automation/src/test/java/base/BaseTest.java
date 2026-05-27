@@ -10,8 +10,12 @@ import org.testng.annotations.BeforeClass;
 
 import java.time.Duration;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class BaseTest {
 
+    private static final Logger log = LogManager.getLogger(BaseTest.class);
     private static final ThreadLocal<WebDriver> driverThread = new ThreadLocal<>();
 
     public static WebDriver getDriver() {
@@ -20,6 +24,7 @@ public class BaseTest {
 
     @BeforeClass
     public void setUp() {
+        log.info("setUp: starting");
         WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
         options.setPageLoadStrategy(PageLoadStrategy.EAGER);
@@ -29,14 +34,17 @@ public class BaseTest {
         WebDriver driver = new ChromeDriver(options);
         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));
         driverThread.set(driver);
+        log.info("setUp: complete");
     }
 
     @AfterClass
     public void tearDown() {
+        log.info("tearDown: starting");
         WebDriver driver = getDriver();
         if (driver != null) {
             driver.quit();
             driverThread.remove();
         }
+        log.info("tearDown: complete");
     }
 }

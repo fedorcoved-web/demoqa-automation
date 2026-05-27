@@ -12,22 +12,24 @@ import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
 
-import java.util.concurrent.ConcurrentHashMap;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class TestListener implements ITestListener {
 
+    private static final Logger log = LogManager.getLogger(TestListener.class);
     private static final ExtentReports extent = ExtentManager.getInstance();
-    private static final ConcurrentHashMap<Long, ExtentTest> testMap = new ConcurrentHashMap<>();
+    private static final ThreadLocal<ExtentTest> testLocal = new ThreadLocal<>();
 
     private ExtentTest getTest() {
-        return testMap.get(Thread.currentThread().getId());
+        return testLocal.get();
     }
 
     @Override
     public void onTestStart(ITestResult result) {
         String description = result.getMethod().getDescription();
         ExtentTest test = extent.createTest(result.getMethod().getMethodName(), description);
-        testMap.put(Thread.currentThread().getId(), test);
+        testLocal.set(test);
     }
 
     @Override
@@ -37,6 +39,7 @@ public class TestListener implements ITestListener {
 
     @Override
     public void onTestFailure(ITestResult result) {
+        log.error("Test failed: {} - {}", result.getMethod().getMethodName(), result.getThrowable().getMessage());
         ExtentTest test = getTest();
         test.fail(result.getThrowable());
         try {
@@ -59,6 +62,6 @@ public class TestListener implements ITestListener {
     @Override
     public void onFinish(ITestContext context) {
         extent.flush();
-        testMap.clear();
+        testLocal.remove();
     }
 }
