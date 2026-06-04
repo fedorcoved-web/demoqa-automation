@@ -1,5 +1,6 @@
 package pages;
 
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -38,6 +39,12 @@ public class PracticeFormPage extends BasePage {
     @FindBy(id = "closeLargeModal")
     private WebElement closeModalButton;
 
+    @FindBy(id = "react-select-3-input" )
+    private WebElement stateDropdown;
+
+    @FindBy(id = "react-select-4-input" )
+    private WebElement cityDropdown;
+
     public PracticeFormPage(WebDriver driver) {
         super(driver);
     }
@@ -75,6 +82,8 @@ public class PracticeFormPage extends BasePage {
         currentAddressInput.sendKeys(address);
     }
 
+
+
     public void submit() {
         jsClick(submitButton);
     }
@@ -95,4 +104,16 @@ public class PracticeFormPage extends BasePage {
     public void closeModal() {
         safeClick(closeModalButton);
     }
-}
+    public void selectState(String state) {
+        stateDropdown.sendKeys(state);
+        stateDropdown.sendKeys(Keys.ENTER);
+    }
+
+    public void selectCity(String city) {
+        cityDropdown.sendKeys(city);
+        cityDropdown.sendKeys(Keys.ENTER);
+    }
+
+    }
+
+

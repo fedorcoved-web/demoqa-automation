@@ -11,7 +11,7 @@
             <class name="tests.TextBoxTest"/>
             <class name="tests.CheckBoxTest"/>
             <class name="tests.RadioButtonTest"/>
-            <!-- <class name="tests.WebTablesTest"/> -->
+            <class name="tests.WebTablesTest"/>
         </classes>
     </test>
 
@@ -32,7 +32,7 @@
         <classes>
             <class name="tests.DatePickerTest"/>
             <class name="tests.SliderTest"/>
-            <!-- <class name="tests.SelectMenuTest"/> -->
+            <class name="tests.SelectMenuTest"/>
         </classes>
     </test>
 
@@ -50,7 +50,7 @@
 
     <test name="API Tests">
         <classes>
-            <!-- <class name="tests.UserApiTest"/> -->
+             <class name="tests.UserApiTest"/>
         </classes>
     </test>
 

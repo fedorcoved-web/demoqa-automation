@@ -1,6 +1,10 @@
 package tests;
 
 import base.BaseTest;
+import io.qameta.allure.Description;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import pages.CheckBoxPage;
@@ -8,10 +12,14 @@ import pages.CheckBoxPage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+@Epic("Elements")
+@Feature("Check Box")
 public class CheckBoxTest extends BaseTest {
 
     private static final Logger log = LogManager.getLogger(CheckBoxTest.class);
 
+    @Story("Select home checkbox and verify result")
+    @Description("Expand the checkbox tree, select the Home node, and verify result section shows home selected")
     @Test(description = "Expand the checkbox tree, select the Home node, and verify result section shows home selected")
     public void testSelectHomeCheckbox() {
         log.info("Starting test: testSelectHomeCheckbox");

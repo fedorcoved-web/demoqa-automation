@@ -1,6 +1,10 @@
 package tests;
 
 import base.BaseTest;
+import io.qameta.allure.Description;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -9,6 +13,8 @@ import pages.TextBoxPage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+@Epic("Elements")
+@Feature("Text Box")
 public class TextBoxTest extends BaseTest {
 
     private static final Logger log = LogManager.getLogger(TextBoxTest.class);
@@ -22,6 +28,8 @@ public class TextBoxTest extends BaseTest {
         };
     }
 
+    @Story("Fill and verify text box form output")
+    @Description("Fill TextBox form with name, email and addresses, then verify output section displays all values correctly")
     @Test(description = "Fill TextBox form with name, email and addresses, then verify output section displays all values correctly",
             dataProvider = "textBoxData")
     public void testFillTextBoxForm(String name, String email, String currentAddress, String permanentAddress) {
