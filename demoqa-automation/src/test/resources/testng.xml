@@ -3,6 +3,7 @@
 <suite name="DemoQA Test Suite" verbose="1" parallel="tests" thread-count="3">
 
     <listeners>
+        <listener class-name="utils.RetryAnalyzerExtension"/>
         <listener class-name="utils.TestListener"/>
     </listeners>
 

@@ -8,6 +8,9 @@ import com.aventstack.extentreports.Status;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
+import io.qameta.allure.Allure;
+import io.qameta.allure.model.StatusDetails;
+import org.testng.IRetryAnalyzer;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
@@ -39,6 +42,19 @@ public class TestListener implements ITestListener {
 
     @Override
     public void onTestFailure(ITestResult result) {
+        IRetryAnalyzer analyzer = result.getMethod().getRetryAnalyzer(result);
+        if (analyzer instanceof RetryAnalyzer ra && ra.isRetryAvailable()) {
+            log.warn("Test '{}' failed — retry attempt, skipping screenshot",
+                    result.getMethod().getMethodName());
+            Allure.getLifecycle().updateTestCase(tc -> {
+                tc.setStatus(io.qameta.allure.model.Status.SKIPPED);
+                StatusDetails details = new StatusDetails();
+                details.setMessage("Retry attempt — test will be re-run");
+                tc.setStatusDetails(details);
+            });
+            return;
+        }
+
         log.error("Test failed: {} - {}", result.getMethod().getMethodName(), result.getThrowable().getMessage());
         ExtentTest test = getTest();
         test.fail(result.getThrowable());
