@@ -20,7 +20,8 @@ public class RadioButtonTest extends BaseTest {
 
     @Story("Select radio button option and verify confirmation message")
     @Description("Select the Impressive radio button and verify the success message displays Impressive")
-    @Test(description = "Select the Impressive radio button and verify the success message displays Impressive")
+    @Test(description = "Select the Impressive radio button and verify the success message displays Impressive",
+            groups = {"sanity", "smoke", "regression"})
     public void testSelectImpressiveRadio() {
         log.info("Starting test: testSelectImpressiveRadio");
         RadioButtonPage page = new RadioButtonPage(getDriver());

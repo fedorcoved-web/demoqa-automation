@@ -20,7 +20,8 @@ public class DatePickerTest extends BaseTest {
 
     @Story("Select date and verify input field value")
     @Description("Select a specific date using the date picker widget and verify the input field reflects the chosen date")
-    @Test(description = "Select a specific date using the date picker widget and verify the input field reflects the chosen date")
+    @Test(description = "Select a specific date using the date picker widget and verify the input field reflects the chosen date",
+            groups = {"regression"})
     public void testSelectDate() {
         log.info("Starting test: testSelectDate");
         DatePickerPage page = new DatePickerPage(getDriver());

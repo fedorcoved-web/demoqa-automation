@@ -20,7 +20,7 @@ public class UploadDownloadTest extends BaseTest {
 
     @Story("Upload a file and verify its name appears in the UI")
     @Description("Upload file and verify filename appears")
-    @Test(description = "Upload file and verify filename appears", groups = "smoke")
+    @Test(description = "Upload file and verify filename appears", groups = {"smoke", "regression"})
     public void testUploadFile() {
         log.info("Starting test: testUploadFile");
         UploadDownloadPage page = new UploadDownloadPage(getDriver());

@@ -31,6 +31,7 @@ public class TextBoxTest extends BaseTest {
     @Story("Fill and verify text box form output")
     @Description("Fill TextBox form with name, email and addresses, then verify output section displays all values correctly")
     @Test(description = "Fill TextBox form with name, email and addresses, then verify output section displays all values correctly",
+            groups = {"sanity", "smoke", "regression"},
             dataProvider = "textBoxData")
     public void testFillTextBoxForm(String name, String email, String currentAddress, String permanentAddress) {
         log.info("Starting test: testFillTextBoxForm");

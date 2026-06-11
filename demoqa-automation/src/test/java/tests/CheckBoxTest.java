@@ -20,7 +20,8 @@ public class CheckBoxTest extends BaseTest {
 
     @Story("Select home checkbox and verify result")
     @Description("Expand the checkbox tree, select the Home node, and verify result section shows home selected")
-    @Test(description = "Expand the checkbox tree, select the Home node, and verify result section shows home selected")
+    @Test(description = "Expand the checkbox tree, select the Home node, and verify result section shows home selected",
+            groups = {"sanity", "smoke", "regression"})
     public void testSelectHomeCheckbox() {
         log.info("Starting test: testSelectHomeCheckbox");
         CheckBoxPage page = new CheckBoxPage(getDriver());

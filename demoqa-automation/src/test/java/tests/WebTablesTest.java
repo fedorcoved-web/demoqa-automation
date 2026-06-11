@@ -20,7 +20,8 @@ public class WebTablesTest extends BaseTest {
 
     @Story("Add new row and verify it appears in the table")
     @Description("Add a new row via the Add button and verify the new entry appears in the web table")
-    @Test(description = "Add a new row via the Add button and verify the new entry appears in the web table")
+    @Test(description = "Add a new row via the Add button and verify the new entry appears in the web table",
+            groups = {"regression"})
     public void testAddNewRow() {
         log.info("Starting test: testAddNewRow");
         WebTablesPage page = new WebTablesPage(getDriver());
@@ -36,7 +37,8 @@ public class WebTablesTest extends BaseTest {
 
     @Story("Delete existing row and verify it is removed from the table")
     @Description("Delete an existing row via the Delete icon and verify the entry disappears from the table")
-    @Test(description = "Delete an existing row via the Delete icon and verify the entry disappears from the table")
+    @Test(description = "Delete an existing row via the Delete icon and verify the entry disappears from the table",
+            groups = {"regression"})
     public void testDeleteRow() {
         log.info("Starting test: testDeleteRow");
         WebTablesPage page = new WebTablesPage(getDriver());
@@ -51,7 +53,8 @@ public class WebTablesTest extends BaseTest {
 
     @Story("Edit row data and verify updated value appears in table")
     @Description("Edit salary of existing row and verify change")
-    @Test(description = "Edit salary of existing row and verify change")
+    @Test(description = "Edit salary of existing row and verify change",
+            groups = {"regression"})
     public void testEditRow() {
         log.info("Starting test: testEditRow");
         WebTablesPage page = new WebTablesPage(getDriver());

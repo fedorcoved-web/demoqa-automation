@@ -20,7 +20,8 @@ public class PracticeFormTest extends BaseTest {
 
     @Story("Submit student registration form and confirm modal")
     @Description("Fill the complete student registration form and verify the submission confirmation modal appears")
-    @Test(description = "Fill the complete student registration form and verify the submission confirmation modal appears")
+    @Test(description = "Fill the complete student registration form and verify the submission confirmation modal appears",
+            groups = {"regression"})
     public void testFillStudentRegistrationForm() {
         log.info("Starting test: testFillStudentRegistrationForm");
         PracticeFormPage page = new PracticeFormPage(getDriver());

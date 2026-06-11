@@ -20,7 +20,8 @@ public class DragAndDropTest extends BaseTest {
 
     @Story("Drag element onto drop target and verify dropped state")
     @Description("Drag the draggable element onto the drop target and verify the droppable area text changes to Dropped!")
-    @Test(description = "Drag the draggable element onto the drop target and verify the droppable area text changes to Dropped!")
+    @Test(description = "Drag the draggable element onto the drop target and verify the droppable area text changes to Dropped!",
+            groups = {"regression"})
     public void testDragAndDrop() {
         log.info("Starting test: testDragAndDrop");
         DragAndDropPage page = new DragAndDropPage(getDriver());

@@ -20,7 +20,8 @@ public class SelectMenuTest extends BaseTest {
 
     @Story("Select option from dropdown and verify active selection")
     @Description("Select an option from the old-style HTML select dropdown and verify the chosen value is active")
-    @Test(description = "Select an option from the old-style HTML select dropdown and verify the chosen value is active")
+    @Test(description = "Select an option from the old-style HTML select dropdown and verify the chosen value is active",
+            groups = {"regression"})
     public void testSelectFromDropdown() {
         log.info("Starting test: testSelectFromDropdown");
         SelectMenuPage page = new SelectMenuPage(getDriver());

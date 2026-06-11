@@ -20,7 +20,8 @@ public class SliderTest extends BaseTest {
 
     @Story("Move slider to target value and verify display")
     @Description("Move the range slider to value 75 and verify the displayed value updates accordingly")
-    @Test(description = "Move the range slider to value 75 and verify the displayed value updates accordingly")
+    @Test(description = "Move the range slider to value 75 and verify the displayed value updates accordingly",
+            groups = {"regression"})
     public void testMoveSlider() {
         log.info("Starting test: testMoveSlider");
         SliderPage page = new SliderPage(getDriver());

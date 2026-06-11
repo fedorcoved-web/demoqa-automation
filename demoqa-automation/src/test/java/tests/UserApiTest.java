@@ -25,7 +25,8 @@ public class UserApiTest extends ApiBaseTest {
 
     @Story("Retrieve existing user by ID")
     @Description("GET /users/2 - existing user is returned with correct id")
-    @Test(description = "GET /users/2 - existing user is returned with correct id")
+    @Test(description = "GET /users/2 - existing user is returned with correct id",
+            groups = {"smoke", "regression"})
     public void getUserTest() {
         log.info("Starting test: getUserTest");
         given()
@@ -39,7 +40,8 @@ public class UserApiTest extends ApiBaseTest {
 
     @Story("Request non-existent user and get 404")
     @Description("GET /users/999 - non-existent user returns 404")
-    @Test(description = "GET /users/999 - non-existent user returns 404")
+    @Test(description = "GET /users/999 - non-existent user returns 404",
+            groups = {"smoke", "regression"})
     public void getUserNotFoundTest() {
         log.info("Starting test: getUserNotFoundTest");
         given()
@@ -52,7 +54,8 @@ public class UserApiTest extends ApiBaseTest {
 
     @Story("Create new user and verify name is echoed back")
     @Description("POST /users - new user is created and name is echoed back")
-    @Test(description = "POST /users - new user is created and name is echoed back")
+    @Test(description = "POST /users - new user is created and name is echoed back",
+            groups = {"smoke", "regression"})
     public void createUserTest() {
         log.info("Starting test: createUserTest");
         Map<String, String> body = new HashMap<>();
@@ -72,7 +75,8 @@ public class UserApiTest extends ApiBaseTest {
 
     @Story("Delete user and verify 204 no content response")
     @Description("DELETE /users/2 - user is deleted with no content response")
-    @Test(description = "DELETE /users/2 - user is deleted with no content response")
+    @Test(description = "DELETE /users/2 - user is deleted with no content response",
+            groups = {"smoke", "regression"})
     public void deleteUserTest() {
         log.info("Starting test: deleteUserTest");
         given()
@@ -85,7 +89,8 @@ public class UserApiTest extends ApiBaseTest {
 
     @Story("Update user job title")
     @Description("PATCH /users/2 - user job is updated and echoed back")
-    @Test(description = "PATCH /users/2 - user job is updated and echoed back")
+    @Test(description = "PATCH /users/2 - user job is updated and echoed back",
+            groups = {"smoke", "regression"})
     public void patchUserTest() {
         log.info("Starting test: patchUserTest");
         Map<String, String> body = new HashMap<>();

@@ -20,7 +20,8 @@ public class BrowserWindowsTest extends BaseTest {
 
     @Story("Open new tab and verify sample page URL and heading")
     @Description("Click New Tab button, switch to the opened tab, and verify its URL contains the expected path")
-    @Test(description = "Click New Tab button, switch to the opened tab, and verify its URL contains the expected path")
+    @Test(description = "Click New Tab button, switch to the opened tab, and verify its URL contains the expected path",
+            groups = {"smoke", "regression"})
     public void testOpenNewTab() {
         log.info("Starting test: testOpenNewTab");
         BrowserWindowsPage page = new BrowserWindowsPage(getDriver());

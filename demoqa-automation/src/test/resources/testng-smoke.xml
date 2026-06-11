@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="DemoQA Smoke Suite" verbose="1" parallel="tests" thread-count="3">
+
+    <listeners>
+        <listener class-name="utils.RetryAnalyzerExtension"/>
+        <listener class-name="utils.TestListener"/>
+    </listeners>
+
+    <test name="Elements">
+        <groups>
+            <run>
+                <include name="smoke"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="tests.TextBoxTest"/>
+            <class name="tests.CheckBoxTest"/>
+            <class name="tests.RadioButtonTest"/>
+            <class name="tests.UploadDownloadTest"/>
+        </classes>
+    </test>
+
+    <test name="Alerts Frames and Windows">
+        <groups>
+            <run>
+                <include name="smoke"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="tests.AlertsTest"/>
+            <class name="tests.BrowserWindowsTest"/>
+        </classes>
+    </test>
+
+    <test name="Widgets">
+        <groups>
+            <run>
+                <include name="smoke"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="tests.DynamicPropertiesTest"/>
+        </classes>
+    </test>
+
+    <test name="API Tests">
+        <groups>
+            <run>
+                <include name="smoke"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="tests.UserApiTest"/>
+        </classes>
+    </test>
+
+</suite>

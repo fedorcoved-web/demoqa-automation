@@ -20,7 +20,8 @@ public class AlertsTest extends BaseTest {
 
     @Story("Accept simple browser alert and verify message")
     @Description("Click the simple alert button, capture alert text, then accept it")
-    @Test(description = "Click the simple alert button, capture alert text, then accept it")
+    @Test(description = "Click the simple alert button, capture alert text, then accept it",
+            groups = {"smoke", "regression"})
     public void testSimpleAlert() {
         log.info("Starting test: testSimpleAlert");
         AlertsPage page = new AlertsPage(getDriver());
@@ -36,7 +37,8 @@ public class AlertsTest extends BaseTest {
 
     @Story("Dismiss confirm alert and verify cancel result")
     @Description("Click the confirm alert button, dismiss it, and verify the result shows Cancel")
-    @Test(description = "Click the confirm alert button, dismiss it, and verify the result shows Cancel")
+    @Test(description = "Click the confirm alert button, dismiss it, and verify the result shows Cancel",
+            groups = {"smoke", "regression"})
     public void testConfirmAlertDismiss() {
         log.info("Starting test: testConfirmAlertDismiss");
         AlertsPage page = new AlertsPage(getDriver());
@@ -51,7 +53,8 @@ public class AlertsTest extends BaseTest {
 
     @Story("Type into prompt alert and verify echoed result")
     @Description("Click the prompt alert button, type text into it, and verify the result displays the typed text")
-    @Test(description = "Click the prompt alert button, type text into it, and verify the result displays the typed text")
+    @Test(description = "Click the prompt alert button, type text into it, and verify the result displays the typed text",
+            groups = {"smoke", "regression"})
     public void testPromptAlert() {
         log.info("Starting test: testPromptAlert");
         AlertsPage page = new AlertsPage(getDriver());
