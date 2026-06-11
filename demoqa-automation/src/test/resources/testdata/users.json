@@ -1,0 +1,8 @@
+[
+  {"name": "John Smith", "email": "john@test.com",
+   "currentAddress": "123 Main St", "permanentAddress": "456 Oak Ave"},
+  {"name": "Jane Doe", "email": "jane@test.com",
+   "currentAddress": "789 Pine Rd", "permanentAddress": "321 Elm St"},
+  {"name": "Bob Johnson", "email": "bob@test.com",
+   "currentAddress": "555 Maple Dr", "permanentAddress": "777 Cedar Ln"}
+]

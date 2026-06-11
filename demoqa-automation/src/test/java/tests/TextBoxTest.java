@@ -8,6 +8,7 @@ import io.qameta.allure.Story;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import utils.JsonDataProvider;
 import pages.TextBoxPage;
 
 import org.apache.logging.log4j.LogManager;
@@ -21,11 +22,7 @@ public class TextBoxTest extends BaseTest {
 
     @DataProvider(name = "textBoxData")
     public Object[][] textBoxData() {
-        return new Object[][] {
-            {"John Doe", "john.doe@example.com", "123 Main Street", "456 Oak Avenue"},
-            {"Anna Smith", "anna.smith@example.com", "789 Pine Road", "321 Elm Street"},
-            {"Ed", "ed@uman.com", "Uman", "Uman"}
-        };
+        return JsonDataProvider.readTextBoxData();
     }
 
     @Story("Fill and verify text box form output")

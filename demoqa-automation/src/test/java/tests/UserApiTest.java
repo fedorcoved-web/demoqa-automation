@@ -6,7 +6,9 @@ import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Story;
 import io.restassured.http.ContentType;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import utils.JsonDataProvider;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -52,15 +54,21 @@ public class UserApiTest extends ApiBaseTest {
         log.info("Test completed: getUserNotFoundTest");
     }
 
+    @DataProvider(name = "apiUserData")
+    public Object[][] apiUserData() {
+        return JsonDataProvider.readApiUserData();
+    }
+
     @Story("Create new user and verify name is echoed back")
     @Description("POST /users - new user is created and name is echoed back")
     @Test(description = "POST /users - new user is created and name is echoed back",
-            groups = {"smoke", "regression"})
-    public void createUserTest() {
+            groups = {"smoke", "regression"},
+            dataProvider = "apiUserData")
+    public void createUserTest(String name, String job) {
         log.info("Starting test: createUserTest");
         Map<String, String> body = new HashMap<>();
-        body.put("name", "Eduard");
-        body.put("job", "QA Engineer");
+        body.put("name", name);
+        body.put("job", job);
 
         given()
             .contentType(ContentType.JSON)
@@ -69,7 +77,7 @@ public class UserApiTest extends ApiBaseTest {
                 .post("/users")
             .then()
                 .statusCode(201)
-                .body("name", equalTo("Eduard"));
+                .body("name", equalTo(name));
         log.info("Test completed: createUserTest");
     }
 
