@@ -13,7 +13,7 @@ public class JsonDataProvider {
     private static final ObjectMapper mapper = new ObjectMapper();
 
     public static Object[][] readTextBoxData() {
-        try (InputStream is = ClassLoader.getSystemResourceAsStream("testdata/users.json")) {
+        try (InputStream is = open("testdata/users.json")) {
             List<Map<String, String>> users =
                     mapper.readValue(is, new TypeReference<List<Map<String, String>>>() {});
             Object[][] data = new Object[users.size()][4];
@@ -31,7 +31,7 @@ public class JsonDataProvider {
     }
 
     public static Object[][] readApiUserData() {
-        try (InputStream is = ClassLoader.getSystemResourceAsStream("testdata/api_users.json")) {
+        try (InputStream is = open("testdata/api_users.json")) {
             List<Map<String, String>> users =
                     mapper.readValue(is, new TypeReference<List<Map<String, String>>>() {});
             Object[][] data = new Object[users.size()][2];
@@ -44,5 +44,11 @@ public class JsonDataProvider {
         } catch (IOException e) {
             throw new RuntimeException("Failed to read testdata/api_users.json", e);
         }
+    }
+
+    private static InputStream open(String path) {
+        InputStream is = JsonDataProvider.class.getClassLoader().getResourceAsStream(path);
+        if (is == null) throw new RuntimeException("Test data file not found on classpath: " + path);
+        return is;
     }
 }

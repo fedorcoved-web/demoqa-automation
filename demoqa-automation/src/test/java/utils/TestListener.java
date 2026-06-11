@@ -43,7 +43,7 @@ public class TestListener implements ITestListener {
     @Override
     public void onTestFailure(ITestResult result) {
         IRetryAnalyzer analyzer = result.getMethod().getRetryAnalyzer(result);
-        if (analyzer instanceof RetryAnalyzer ra && ra.isRetryAvailable()) {
+        if (analyzer instanceof RetryAnalyzer ra && ra.isRetryAvailable(result)) {
             log.warn("Test '{}' failed — retry attempt, skipping screenshot",
                     result.getMethod().getMethodName());
             Allure.getLifecycle().updateTestCase(tc -> {
@@ -72,7 +72,14 @@ public class TestListener implements ITestListener {
 
     @Override
     public void onTestSkipped(ITestResult result) {
-        getTest().skip(result.getThrowable());
+        ExtentTest test = getTest();
+        if (test == null) return;
+        Throwable t = result.getThrowable();
+        if (t != null) {
+            test.skip(t);
+        } else {
+            test.skip("Test skipped");
+        }
     }
 
     @Override
