@@ -22,8 +22,14 @@ public class BaseTest {
         return driverThread.get();
     }
 
-    @BeforeMethod
+    @BeforeMethod(alwaysRun = true)
     public void setUp() {
+        // Defensive: quit any driver left over if tearDown was skipped (e.g. by a retry edge-case)
+        WebDriver existing = driverThread.get();
+        if (existing != null) {
+            try { existing.quit(); } catch (Exception ignored) {}
+            driverThread.remove();
+        }
         log.info("setUp: starting");
         WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
@@ -37,7 +43,7 @@ public class BaseTest {
         log.info("setUp: complete");
     }
 
-    @AfterMethod
+    @AfterMethod(alwaysRun = true)
     public void tearDown() {
         log.info("tearDown: starting");
         WebDriver driver = getDriver();
