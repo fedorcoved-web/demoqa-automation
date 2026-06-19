@@ -1,0 +1,2 @@
+CREATE SCHEMA IF NOT EXISTS healenium;
+GRANT ALL PRIVILEGES ON SCHEMA healenium TO healenium_user;

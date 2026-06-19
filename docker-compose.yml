@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  healenium-db:
+    image: postgres:15
+    container_name: healenium-db
+    environment:
+      POSTGRES_DB: healenium
+      POSTGRES_USER: healenium_user
+      POSTGRES_PASSWORD: YDuyw953WorkHard
+    volumes:
+      - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - healenium-db-data:/var/lib/postgresql/data
+    networks:
+      - healenium-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U healenium_user -d healenium"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  healenium-backend:
+    image: healenium/hlm-backend:3.4.2
+    container_name: healenium-backend
+    ports:
+      - "7878:7878"
+      - "8080:8080"
+    environment:
+      spring.datasource.url: jdbc:postgresql://healenium-db:5432/healenium?currentSchema=healenium
+      spring.datasource.username: healenium_user
+      spring.datasource.password: YDuyw953WorkHard
+      spring.jpa.properties.hibernate.default_schema: healenium
+    depends_on:
+      healenium-db:
+        condition: service_healthy
+    networks:
+      - healenium-network
+
+networks:
+  healenium-network:
+    driver: bridge
+
+volumes:
+  healenium-db-data:
