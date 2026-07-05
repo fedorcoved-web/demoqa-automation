@@ -1,0 +1,10 @@
+# Template for config.properties (the real file is gitignored — copy this file,
+# rename it to config.properties and fill in your own keys).
+# On CI the same values can be supplied via environment variables instead.
+
+# Testiny REST API key (https://app.testiny.io -> Settings -> API keys)
+testiny.api.key=
+
+# reqres.in REST API key (free key from https://reqres.in/signup)
+# Env var fallback: REQRES_API_KEY
+reqres.api.key=

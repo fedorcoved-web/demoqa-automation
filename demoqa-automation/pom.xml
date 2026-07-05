@@ -89,6 +89,23 @@
             <groupId>com.epam.healenium</groupId>
             <artifactId>healenium-web</artifactId>
             <version>${healenium.version}</version>
+            <!-- healenium leaks JUnit engines onto the test classpath, which makes
+                 Surefire auto-detect the JUnitPlatform provider instead of TestNG
+                 and silently run 0 tests -->
+            <exclusions>
+                <exclusion>
+                    <groupId>org.junit.jupiter</groupId>
+                    <artifactId>junit-jupiter-engine</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.junit.jupiter</groupId>
+                    <artifactId>junit-jupiter-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.testcontainers</groupId>
+                    <artifactId>junit-jupiter</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 
