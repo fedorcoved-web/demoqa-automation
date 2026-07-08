@@ -34,9 +34,14 @@ public class BaseTest {
         WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
         options.setPageLoadStrategy(PageLoadStrategy.EAGER);
-        options.addArguments("--start-maximized");
         options.addArguments("--disable-notifications");
         options.addArguments("--disable-popup-blocking");
+        if (Boolean.parseBoolean(System.getProperty("headless", "false"))) {
+            options.addArguments("--headless=new", "--window-size=1920,1080");
+            options.addArguments("--disable-gpu", "--no-sandbox", "--disable-dev-shm-usage");
+        } else {
+            options.addArguments("--start-maximized");
+        }
         WebDriver driver = new ChromeDriver(options);
         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));
         driverThread.set(driver);

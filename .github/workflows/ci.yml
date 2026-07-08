@@ -1,0 +1,140 @@
+name: CI
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: ["**"]
+
+jobs:
+  smoke-tests:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: demoqa-automation
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17 (Temurin)
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Cache Maven dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('demoqa-automation/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Run smoke suite (headless Chrome)
+        env:
+          REQRES_API_KEY: ${{ secrets.REQRES_API_KEY }}
+        run: mvn test -Dsuite.file=testng-smoke -Dheadless=true
+
+      - name: Upload Allure results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results
+          path: demoqa-automation/target/allure-results
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Upload Extent report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: extent-report
+          path: demoqa-automation/test-output/ExtentReport.html
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Write test summary
+        if: always()
+        run: |
+          RESULTS_FILE="target/surefire-reports/testng-results.xml"
+          if [ -f "$RESULTS_FILE" ]; then
+            TOTAL=$(grep -oP 'total="\K[0-9]+' "$RESULTS_FILE" || echo "?")
+            PASSED=$(grep -oP 'passed="\K[0-9]+' "$RESULTS_FILE" || echo "?")
+            FAILED=$(grep -oP 'failed="\K[0-9]+' "$RESULTS_FILE" || echo "?")
+            SKIPPED=$(grep -oP 'skipped="\K[0-9]+' "$RESULTS_FILE" || echo "?")
+
+            {
+              echo "### Smoke Suite Results"
+              echo ""
+              echo "| Total | Passed | Failed | Skipped |"
+              echo "|-------|--------|--------|---------|"
+              echo "| $TOTAL | $PASSED | $FAILED | $SKIPPED |"
+            } >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "### Smoke Suite Results" >> "$GITHUB_STEP_SUMMARY"
+            echo "No test results file found — the build likely failed before tests ran." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+  publish-allure-report:
+    name: Publish Allure report to GitHub Pages
+    needs: smoke-tests
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master' && needs.smoke-tests.result == 'success'
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+
+    concurrency:
+      group: "pages"
+      cancel-in-progress: false
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    defaults:
+      run:
+        working-directory: demoqa-automation
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17 (Temurin)
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Cache Maven dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('demoqa-automation/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Download Allure results
+        uses: actions/download-artifact@v4
+        with:
+          name: allure-results
+          path: demoqa-automation/target/allure-results
+
+      - name: Generate Allure HTML report
+        run: mvn io.qameta.allure:allure-maven:report
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: demoqa-automation/target/site/allure-maven-plugin
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
