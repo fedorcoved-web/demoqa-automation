@@ -22,7 +22,7 @@ UI and API test automation suite for [demoqa.com](https://demoqa.com), built wit
 
 - `src/test/java/pages` — page objects
 - `src/test/java/tests` — UI and API test classes
-- `src/test/java/base` — base classes for UI (`BaseTest`) and API (`ApiBaseTest`) tests
+- `src/test/java/base` — base classes for UI (`BaseTest`) and API (`ApiBaseTest`) tests, plus `BrowserFactory` for cross-browser driver creation
 - `src/test/java/utils` — listeners, retry analyzer, config/report utilities
 - `src/test/resources` — TestNG suite files (`testng.xml`, `testng-smoke.xml`, `testng-sanity.xml`, `testng-regression.xml`)
 
@@ -30,7 +30,7 @@ UI and API test automation suite for [demoqa.com](https://demoqa.com), built wit
 
 - JDK 17
 - Maven 3.9+
-- Google Chrome
+- Google Chrome (default browser; Firefox or Edge required only if you run with `-Dbrowser=firefox`/`edge`)
 - A `reqres.in` API key (see below), required by `ApiBaseTest` for the API tests
 
 ## Configuration
@@ -57,6 +57,14 @@ mvn test -Dsuite.file=testng-smoke -Dheadless=true
 ```
 
 Other suites: swap `-Dsuite.file` for `testng-sanity` or `testng-regression`.
+
+Choosing a browser (defaults to `chrome` if `-Dbrowser` is omitted):
+
+```bash
+mvn test -Dbrowser=firefox -Dsuite.file=testng-smoke -Dheadless=true
+```
+
+Supported values: `chrome`, `firefox`, `edge`. Driver binaries are resolved automatically by WebDriverManager, no manual driver setup needed.
 
 ## Reports
 

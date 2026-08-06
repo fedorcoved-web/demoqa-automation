@@ -40,3 +40,10 @@ build/
 
 ### Secrets ###
 **/src/test/resources/config.properties
+
+### Test/report artifacts ###
+test-output/
+**/.allure/
+
+### Personal notes ###
+demoqa-automation/HEALENIUM_CI_STORY.md

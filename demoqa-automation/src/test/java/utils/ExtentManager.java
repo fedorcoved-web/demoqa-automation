@@ -19,7 +19,8 @@ public class ExtentManager {
             extent.attachReporter(reporter);
             extent.setSystemInfo("Application", "DemoQA");
             extent.setSystemInfo("Environment", "QA");
-            extent.setSystemInfo("Browser", "Chrome");
+            String browser = System.getProperty("browser", "chrome");
+            extent.setSystemInfo("Browser", Character.toUpperCase(browser.charAt(0)) + browser.substring(1));
         }
         return extent;
     }

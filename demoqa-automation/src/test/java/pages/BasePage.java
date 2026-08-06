@@ -17,7 +17,12 @@ public abstract class BasePage {
     protected final JavascriptExecutor js;
 
     protected BasePage(WebDriver driver) {
-        this.driver = SelfHealingDriver.create(driver);
+        // TODO(diagnostics): temporary escape hatch to isolate Healenium/Docker
+        // infra noise from real locator failures. Run `mvn test -Dhealenium.enabled=false`
+        // to use a plain, unwrapped driver. Remove once the CI docker-compose
+        // healenium-backend startup is fixed, or keep as a permanent debug toggle.
+        boolean healingEnabled = Boolean.parseBoolean(System.getProperty("healenium.enabled", "true"));
+        this.driver = healingEnabled ? SelfHealingDriver.create(driver) : driver;
         this.wait = new WebDriverWait(this.driver, Duration.ofSeconds(15));
         this.js = (JavascriptExecutor) this.driver;
         PageFactory.initElements(this.driver, this);

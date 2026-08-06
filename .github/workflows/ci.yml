@@ -5,9 +5,22 @@ on:
     branches: ["**"]
   pull_request:
     branches: ["**"]
+  workflow_dispatch:
+    inputs:
+      browser:
+        description: "Browser to run the cross-browser smoke suite against"
+        required: true
+        default: "all"
+        type: choice
+        options:
+          - chrome
+          - firefox
+          - edge
+          - all
 
 jobs:
   smoke-tests:
+    if: github.event_name != 'workflow_dispatch'
     runs-on: ubuntu-latest
 
     defaults:
@@ -32,10 +45,35 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
+      - name: Start Healenium infrastructure (docker compose up)
+        working-directory: .
+        run: docker compose up -d
+
+      - name: Wait for healenium-backend to accept connections
+        working-directory: .
+        run: |
+          echo "Waiting for healenium-backend on localhost:7878..."
+          for i in $(seq 1 40); do
+            if curl -s -o /dev/null http://localhost:7878; then
+              echo "healenium-backend is accepting connections after ${i} attempt(s)."
+              exit 0
+            fi
+            echo "Not ready yet (attempt $i/40), retrying in 3s..."
+            sleep 3
+          done
+          echo "::error::healenium-backend did not start accepting connections within the timeout"
+          docker compose logs
+          exit 1
+
       - name: Run smoke suite (headless Chrome)
         env:
           REQRES_API_KEY: ${{ secrets.REQRES_API_KEY }}
         run: mvn test -Dsuite.file=testng-smoke -Dheadless=true
+
+      - name: Stop Healenium infrastructure (docker compose down)
+        if: always()
+        working-directory: .
+        run: docker compose down -v
 
       - name: Upload Allure results
         if: always()
@@ -76,6 +114,77 @@ jobs:
             echo "### Smoke Suite Results" >> "$GITHUB_STEP_SUMMARY"
             echo "No test results file found — the build likely failed before tests ran." >> "$GITHUB_STEP_SUMMARY"
           fi
+
+  cross-browser-smoke:
+    name: Cross-browser smoke suite (manual, ${{ matrix.browser }})
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: ${{ github.event.inputs.browser == 'all' && fromJSON('["chrome","firefox","edge"]') || fromJSON(format('["{0}"]', github.event.inputs.browser)) }}
+
+    defaults:
+      run:
+        working-directory: demoqa-automation
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17 (Temurin)
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Cache Maven dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('demoqa-automation/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Start Healenium infrastructure (docker compose up)
+        working-directory: .
+        run: docker compose up -d
+
+      - name: Wait for healenium-backend to accept connections
+        working-directory: .
+        run: |
+          echo "Waiting for healenium-backend on localhost:7878..."
+          for i in $(seq 1 40); do
+            if curl -s -o /dev/null http://localhost:7878; then
+              echo "healenium-backend is accepting connections after ${i} attempt(s)."
+              exit 0
+            fi
+            echo "Not ready yet (attempt $i/40), retrying in 3s..."
+            sleep 3
+          done
+          echo "::error::healenium-backend did not start accepting connections within the timeout"
+          docker compose logs
+          exit 1
+
+      - name: Run smoke suite (headless ${{ matrix.browser }})
+        env:
+          REQRES_API_KEY: ${{ secrets.REQRES_API_KEY }}
+        run: mvn test -Dsuite.file=testng-smoke -Dheadless=true -Dbrowser=${{ matrix.browser }}
+
+      - name: Stop Healenium infrastructure (docker compose down)
+        if: always()
+        working-directory: .
+        run: docker compose down -v
+
+      - name: Upload Allure results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results-${{ matrix.browser }}
+          path: demoqa-automation/target/allure-results
+          if-no-files-found: warn
+          retention-days: 30
 
   publish-allure-report:
     name: Publish Allure report to GitHub Pages

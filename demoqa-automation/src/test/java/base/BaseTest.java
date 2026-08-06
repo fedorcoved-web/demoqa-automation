@@ -1,10 +1,6 @@
 package base;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
-import org.openqa.selenium.PageLoadStrategy;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
@@ -31,18 +27,7 @@ public class BaseTest {
             driverThread.remove();
         }
         log.info("setUp: starting");
-        WebDriverManager.chromedriver().setup();
-        ChromeOptions options = new ChromeOptions();
-        options.setPageLoadStrategy(PageLoadStrategy.EAGER);
-        options.addArguments("--disable-notifications");
-        options.addArguments("--disable-popup-blocking");
-        if (Boolean.parseBoolean(System.getProperty("headless", "false"))) {
-            options.addArguments("--headless=new", "--window-size=1920,1080");
-            options.addArguments("--disable-gpu", "--no-sandbox", "--disable-dev-shm-usage");
-        } else {
-            options.addArguments("--start-maximized");
-        }
-        WebDriver driver = new ChromeDriver(options);
+        WebDriver driver = BrowserFactory.createDriver();
         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));
         driverThread.set(driver);
         log.info("setUp: complete");
