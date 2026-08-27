@@ -18,6 +18,7 @@
             <class name="tests.CheckBoxTest"/>
             <class name="tests.RadioButtonTest"/>
             <class name="tests.UploadDownloadTest"/>
+            <class name="tests.BrokenImagesTest"/>
         </classes>
     </test>
 

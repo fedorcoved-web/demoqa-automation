@@ -12,7 +12,7 @@ import pages.BrokenImagesPage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-@Epic("Book Store Application")
+@Epic("Elements")
 @Feature("Broken Images")
 public class BrokenImagesTest extends BaseTest {
 
@@ -20,7 +20,8 @@ public class BrokenImagesTest extends BaseTest {
 
     @Story("Verify at least one valid image loads on the page")
     @Description("Navigate to the broken images page and verify at least one valid image loads with a non-zero natural width")
-    @Test(description = "Navigate to the broken images page and verify at least one valid image loads with a non-zero natural width")
+    @Test(description = "Navigate to the broken images page and verify at least one valid image loads with a non-zero natural width",
+            groups = {"smoke", "regression"})
     public void testValidImageLoads() {
         log.info("Starting test: testValidImageLoads");
         BrokenImagesPage page = new BrokenImagesPage(getDriver());

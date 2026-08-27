@@ -19,6 +19,7 @@
             <class name="tests.RadioButtonTest"/>
             <class name="tests.WebTablesTest"/>
             <class name="tests.UploadDownloadTest"/>
+            <class name="tests.BrokenImagesTest"/>
         </classes>
     </test>
 

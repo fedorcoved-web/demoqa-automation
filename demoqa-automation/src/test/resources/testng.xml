@@ -13,6 +13,8 @@
             <class name="tests.CheckBoxTest"/>
             <class name="tests.RadioButtonTest"/>
             <class name="tests.WebTablesTest"/>
+            <class name="tests.UploadDownloadTest"/>
+            <class name="tests.BrokenImagesTest"/>
         </classes>
     </test>
 
@@ -34,18 +36,13 @@
             <class name="tests.DatePickerTest"/>
             <class name="tests.SliderTest"/>
             <class name="tests.SelectMenuTest"/>
+            <class name="tests.DynamicPropertiesTest"/>
         </classes>
     </test>
 
     <test name="Interactions">
         <classes>
             <class name="tests.DragAndDropTest"/>
-        </classes>
-    </test>
-
-    <test name="Book Store Application">
-        <classes>
-            <class name="tests.BrokenImagesTest"/>
         </classes>
     </test>
 

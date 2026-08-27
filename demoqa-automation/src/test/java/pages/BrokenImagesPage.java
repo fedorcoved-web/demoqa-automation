@@ -1,5 +1,6 @@
 package pages;
 
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -16,17 +17,23 @@ public class BrokenImagesPage extends BasePage {
     }
 
     public void navigateTo() {
-        navigateTo("https://demoqa.com/broken");
+        navigateTo("/broken");
     }
 
+    // EAGER page load strategy returns control before images finish downloading,
+    // so poll instead of checking naturalWidth once immediately after navigation.
     public boolean hasValidImage() {
-        for (WebElement img : images) {
-            Long naturalWidth = (Long) js.executeScript("return arguments[0].naturalWidth;", img);
-            if (naturalWidth != null && naturalWidth > 0) {
-                return true;
-            }
+        try {
+            wait.until(d -> images.stream().anyMatch(this::isLoaded));
+            return true;
+        } catch (TimeoutException e) {
+            return false;
         }
-        return false;
+    }
+
+    private boolean isLoaded(WebElement img) {
+        Long naturalWidth = (Long) js.executeScript("return arguments[0].naturalWidth;", img);
+        return naturalWidth != null && naturalWidth > 0;
     }
 
     public int getTotalImageCount() {
