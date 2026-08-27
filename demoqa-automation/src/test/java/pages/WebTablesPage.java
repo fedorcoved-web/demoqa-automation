@@ -1,5 +1,6 @@
 package pages;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -44,7 +45,7 @@ public class WebTablesPage extends BasePage {
     @FindBy(css = "span[title='Delete']")
     private List<WebElement> deleteButtons;
 
-    @FindBy(css = "span[id='edit-record-1'] svg path")
+    @FindBy(css = "span[title='Edit']")
     private List<WebElement> editButtons;
 
     public WebTablesPage(WebDriver driver) {
@@ -52,7 +53,7 @@ public class WebTablesPage extends BasePage {
     }
 
     public void navigateTo() {
-        navigateTo("https://demoqa.com/webtables");
+        navigateTo("/webtables");
         wait.until(ExpectedConditions.elementToBeClickable(addButton));
     }
 
@@ -61,8 +62,12 @@ public class WebTablesPage extends BasePage {
         wait.until(ExpectedConditions.visibilityOf(firstNameInput));
     }
 
-    public void clickEditButtons() {
-        editButtons.get(0).click();
+    public void clickFirstEditButton() {
+        if (editButtons.isEmpty()) {
+            throw new IllegalStateException("No edit buttons found — search returned no rows");
+        }
+        safeClick(editButtons.get(0));
+        wait.until(ExpectedConditions.visibilityOf(firstNameInput));
     }
 
     public void fillRegistrationForm(String firstName, String lastName, String email,
@@ -76,6 +81,7 @@ public class WebTablesPage extends BasePage {
     }
 
     public void editSalary(String salary) {
+        salaryInput.clear();
         salaryInput.sendKeys(salary);
     }
 
@@ -103,12 +109,27 @@ public class WebTablesPage extends BasePage {
     }
 
     public void deleteFirstRow() {
-        if (!deleteButtons.isEmpty()) {
-            deleteButtons.get(0).click();
+        if (deleteButtons.isEmpty()) {
+            throw new IllegalStateException("No delete buttons found — search returned no rows");
         }
+        safeClick(deleteButtons.get(0));
     }
 
     public int getNonEmptyRowCount() {
         return (int) tableRows.stream().filter(r -> !r.getText().trim().isEmpty()).count();
+    }
+
+    // Columns rendered by DemoQA's web table: First Name, Last Name, Age, Email, Salary, Department, Action.
+    public String getCellText(int rowIndex, int colIndex) {
+        return tableRows.get(rowIndex).findElements(By.tagName("td")).get(colIndex).getText();
+    }
+
+    public boolean waitForExactCellText(int rowIndex, int colIndex, String expected) {
+        try {
+            wait.until(d -> expected.equals(getCellText(rowIndex, colIndex)));
+            return true;
+        } catch (TimeoutException e) {
+            return false;
+        }
     }
 }

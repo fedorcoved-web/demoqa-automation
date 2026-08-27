@@ -44,6 +44,9 @@ public class WebTablesTest extends BaseTest {
         WebTablesPage page = new WebTablesPage(getDriver());
         page.navigateTo();
         page.searchFor("Cierra");
+        Assert.assertTrue(page.waitForNameInTable("Cierra"),
+                "Precondition: 'Cierra' must be present in the table before delete");
+
         page.deleteFirstRow();
 
         Assert.assertFalse(page.isNamePresentInTable("Cierra"),
@@ -60,11 +63,14 @@ public class WebTablesTest extends BaseTest {
         WebTablesPage page = new WebTablesPage(getDriver());
         page.navigateTo();
         page.searchFor("Cierra");
-        page.clickEditButtons();        // відкрити форму редагування
+        page.clickFirstEditButton();    // відкрити форму редагування
         page.editSalary("11000");       // змінити зарплату
         page.submitForm();              // підтвердити
-        Assert.assertTrue(page.isNamePresentInTable("11000"),
-                "Updated salary should be visible in table");
+
+        // Search still filters on "Cierra", so the edited row stays at index 0;
+        // exact match on the Salary column (index 4) instead of contains-anywhere.
+        Assert.assertTrue(page.waitForExactCellText(0, 4, "11000"),
+                "Salary column of the edited row should equal exactly '11000'");
         log.info("Test completed: testEditRow");
     }
 
