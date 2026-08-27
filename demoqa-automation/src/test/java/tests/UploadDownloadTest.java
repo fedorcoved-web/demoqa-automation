@@ -12,6 +12,8 @@ import pages.UploadDownloadPage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.nio.file.Paths;
+
 @Epic("Elements")
 @Feature("Upload & Download")
 public class UploadDownloadTest extends BaseTest {
@@ -21,12 +23,14 @@ public class UploadDownloadTest extends BaseTest {
     @Story("Upload a file and verify its name appears in the UI")
     @Description("Upload file and verify filename appears")
     @Test(description = "Upload file and verify filename appears", groups = {"smoke", "regression"})
-    public void testUploadFile() {
+    public void testUploadFile() throws Exception {
         log.info("Starting test: testUploadFile");
         UploadDownloadPage page = new UploadDownloadPage(getDriver());
         page.navigateTo();
 
-        String filePath = System.getProperty("user.dir") + "\\src\\test\\resources\\test-upload.txt";
+        String filePath = Paths.get(
+                getClass().getClassLoader().getResource("test-upload.txt").toURI()
+        ).toAbsolutePath().toString();
         page.uploadFile(filePath);
 
         Assert.assertTrue(page.getUploadedFileName().contains("test-upload.txt"),
