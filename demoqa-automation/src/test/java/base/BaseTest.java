@@ -1,5 +1,6 @@
 package base;
 
+import com.epam.healenium.SelfHealingDriver;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -29,6 +30,15 @@ public class BaseTest {
         log.info("setUp: starting");
         WebDriver driver = BrowserFactory.createDriver();
         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));
+
+        // Diagnostic escape hatch to isolate Healenium/Docker infra noise from real
+        // locator failures: run `mvn test -Dhealenium.enabled=false` for a plain driver.
+        // Wrapped once per test here (not per Page object) so every page shares one proxy.
+        boolean healingEnabled = Boolean.parseBoolean(System.getProperty("healenium.enabled", "true"));
+        if (healingEnabled) {
+            driver = SelfHealingDriver.create(driver);
+        }
+
         driverThread.set(driver);
         log.info("setUp: complete");
     }

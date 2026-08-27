@@ -22,7 +22,7 @@ public class BrowserWindowsPage extends BasePage {
     }
 
     public void navigateTo() {
-        navigateTo("https://demoqa.com/browser-windows");
+        navigateTo("/browser-windows");
         wait.until(ExpectedConditions.elementToBeClickable(newTabButton));
     }
 

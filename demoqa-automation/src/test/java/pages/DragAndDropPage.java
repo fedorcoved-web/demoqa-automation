@@ -21,7 +21,7 @@ public class DragAndDropPage extends BasePage {
     }
 
     public void navigateTo() {
-        navigateTo("https://demoqa.com/droppable");
+        navigateTo("/droppable");
         wait.until(ExpectedConditions.elementToBeClickable(draggable));
     }
 

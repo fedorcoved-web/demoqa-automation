@@ -16,7 +16,7 @@ public class DatePickerPage extends BasePage {
     }
 
     public void navigateTo() {
-        navigateTo("https://demoqa.com/date-picker");
+        navigateTo("/date-picker");
         wait.until(ExpectedConditions.elementToBeClickable(datePickerInput));
     }
 

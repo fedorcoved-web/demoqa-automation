@@ -29,7 +29,7 @@ public class AlertsPage extends BasePage {
     }
 
     public void navigateTo() {
-        navigateTo("https://demoqa.com/alerts");
+        navigateTo("/alerts");
         wait.until(ExpectedConditions.elementToBeClickable(simpleAlertButton));
     }
 

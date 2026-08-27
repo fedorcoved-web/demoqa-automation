@@ -16,7 +16,7 @@ public class SelectMenuPage extends BasePage {
     }
 
     public void navigateTo() {
-        navigateTo("https://demoqa.com/select-menu");
+        navigateTo("/select-menu");
         wait.until(ExpectedConditions.elementToBeClickable(oldSelectMenu));
     }
 

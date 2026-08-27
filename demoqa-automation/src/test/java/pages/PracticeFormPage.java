@@ -50,7 +50,7 @@ public class PracticeFormPage extends BasePage {
     }
 
     public void navigateTo() {
-        navigateTo("https://demoqa.com/automation-practice-form");
+        navigateTo("/automation-practice-form");
         wait.until(ExpectedConditions.visibilityOf(firstNameInput));
     }
 

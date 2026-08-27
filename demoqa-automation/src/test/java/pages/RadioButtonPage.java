@@ -21,7 +21,7 @@ public class RadioButtonPage extends BasePage {
     }
 
     public void navigateTo() {
-        navigateTo("https://demoqa.com/radio-button");
+        navigateTo("/radio-button");
         wait.until(ExpectedConditions.elementToBeClickable(yesRadio));
     }
 

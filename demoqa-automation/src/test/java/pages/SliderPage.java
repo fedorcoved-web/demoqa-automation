@@ -18,7 +18,7 @@ public class SliderPage extends BasePage {
     }
 
     public void navigateTo() {
-        navigateTo("https://demoqa.com/slider");
+        navigateTo("/slider");
         wait.until(ExpectedConditions.visibilityOf(slider));
     }
 

@@ -6,6 +6,8 @@ import java.util.Properties;
 
 public final class ConfigReader {
 
+    private static final String DEFAULT_BASE_URL = "https://demoqa.com";
+
     private static final Properties props = load();
 
     private ConfigReader() {
@@ -34,5 +36,14 @@ public final class ConfigReader {
             value = System.getenv(envVar);
         }
         return value;
+    }
+
+    /**
+     * Base URL for the site under test. Override via {@code -Dbase.url=...}
+     * (e.g. to point at a staging environment); defaults to the public demoqa.com.
+     */
+    public static String baseUrl() {
+        String value = System.getProperty("base.url");
+        return (value == null || value.isBlank()) ? DEFAULT_BASE_URL : value;
     }
 }

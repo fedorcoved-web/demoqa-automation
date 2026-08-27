@@ -18,7 +18,7 @@ public class UploadDownloadPage extends BasePage {
     }
 
     public void navigateTo() {
-        navigateTo("https://demoqa.com/upload-download");
+        navigateTo("/upload-download");
         wait.until(ExpectedConditions.visibilityOf(uploadFileInput));
     }
 

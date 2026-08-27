@@ -25,7 +25,7 @@ public class CheckBoxPage extends BasePage {
     }
 
     public void navigateTo() {
-        navigateTo("https://demoqa.com/checkbox");
+        navigateTo("/checkbox");
         wait.until(ExpectedConditions.presenceOfElementLocated(TREE_READY));
     }
 

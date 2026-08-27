@@ -1,12 +1,12 @@
 package pages;
 
-import com.epam.healenium.SelfHealingDriver;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import utils.ConfigReader;
 
 import java.time.Duration;
 
@@ -16,13 +16,10 @@ public abstract class BasePage {
     protected final WebDriverWait wait;
     protected final JavascriptExecutor js;
 
+    // Driver arrives already wrapped (or not) by BaseTest.setUp() based on
+    // -Dhealenium.enabled — pages just consume it, they don't decide healing policy.
     protected BasePage(WebDriver driver) {
-        // TODO(diagnostics): temporary escape hatch to isolate Healenium/Docker
-        // infra noise from real locator failures. Run `mvn test -Dhealenium.enabled=false`
-        // to use a plain, unwrapped driver. Remove once the CI docker-compose
-        // healenium-backend startup is fixed, or keep as a permanent debug toggle.
-        boolean healingEnabled = Boolean.parseBoolean(System.getProperty("healenium.enabled", "true"));
-        this.driver = healingEnabled ? SelfHealingDriver.create(driver) : driver;
+        this.driver = driver;
         this.wait = new WebDriverWait(this.driver, Duration.ofSeconds(15));
         this.js = (JavascriptExecutor) this.driver;
         PageFactory.initElements(this.driver, this);
@@ -32,9 +29,10 @@ public abstract class BasePage {
         js.executeScript("arguments[0].scrollIntoView({block:'center'});", element);
     }
 
-    // Navigates to url and immediately strips ad nodes so they cannot intercept clicks.
-    protected void navigateTo(String url) {
-        driver.get(url);
+    // Navigates to <base URL><path> and immediately strips ad nodes so they cannot intercept clicks.
+    // base.url defaults to https://demoqa.com; override with -Dbase.url=... for other environments.
+    protected void navigateTo(String path) {
+        driver.get(ConfigReader.baseUrl() + path);
         dismissAds();
     }
 

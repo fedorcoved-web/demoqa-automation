@@ -39,7 +39,7 @@ public class TextBoxPage extends BasePage {
     }
 
     public void navigateTo() {
-        navigateTo("https://demoqa.com/text-box");
+        navigateTo("/text-box");
         wait.until(ExpectedConditions.visibilityOf(fullNameInput));
     }
 

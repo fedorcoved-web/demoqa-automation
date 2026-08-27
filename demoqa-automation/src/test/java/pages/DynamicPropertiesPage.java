@@ -18,7 +18,7 @@ public class DynamicPropertiesPage extends BasePage {
     }
 
     public void navigateTo() {
-        navigateTo("https://demoqa.com/dynamic-properties");
+        navigateTo("/dynamic-properties");
         wait.until(ExpectedConditions.visibilityOf(enableAfterButton));
     }
 
