@@ -1,6 +1,5 @@
 package pages;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -14,27 +13,6 @@ public class WebTablesPage extends BasePage {
     @FindBy(id = "addNewRecordButton")
     private WebElement addButton;
 
-    @FindBy(id = "firstName")
-    private WebElement firstNameInput;
-
-    @FindBy(id = "lastName")
-    private WebElement lastNameInput;
-
-    @FindBy(id = "userEmail")
-    private WebElement emailInput;
-
-    @FindBy(id = "age")
-    private WebElement ageInput;
-
-    @FindBy(id = "salary")
-    private WebElement salaryInput;
-
-    @FindBy(id = "department")
-    private WebElement departmentInput;
-
-    @FindBy(id = "submit")
-    private WebElement submitButton;
-
     @FindBy(id = "searchBox")
     private WebElement searchBox;
 
@@ -45,9 +23,6 @@ public class WebTablesPage extends BasePage {
     @FindBy(css = "span[title='Delete']")
     private List<WebElement> deleteButtons;
 
-    @FindBy(css = "span[title='Edit']")
-    private List<WebElement> editButtons;
-
     public WebTablesPage(WebDriver driver) {
         super(driver);
     }
@@ -55,40 +30,6 @@ public class WebTablesPage extends BasePage {
     public void navigateTo() {
         navigateTo("/webtables");
         wait.until(ExpectedConditions.elementToBeClickable(addButton));
-    }
-
-    public void clickAddButton() {
-        safeClick(addButton);
-        wait.until(ExpectedConditions.visibilityOf(firstNameInput));
-    }
-
-    public void clickFirstEditButton() {
-        if (editButtons.isEmpty()) {
-            throw new IllegalStateException("No edit buttons found — search returned no rows");
-        }
-        safeClick(editButtons.get(0));
-        wait.until(ExpectedConditions.visibilityOf(firstNameInput));
-    }
-
-    public void fillRegistrationForm(String firstName, String lastName, String email,
-                                     String age, String salary, String department) {
-        firstNameInput.sendKeys(firstName);
-        lastNameInput.sendKeys(lastName);
-        emailInput.sendKeys(email);
-        ageInput.sendKeys(age);
-        salaryInput.sendKeys(salary);
-        departmentInput.sendKeys(department);
-    }
-
-    public void editSalary(String salary) {
-        salaryInput.clear();
-        salaryInput.sendKeys(salary);
-    }
-
-    public void submitForm() {
-        // JS click bypasses any ad overlay covering the modal's submit button
-        jsClick(submitButton);
-        wait.until(ExpectedConditions.invisibilityOf(firstNameInput));
     }
 
     public void searchFor(String term) {
@@ -117,19 +58,5 @@ public class WebTablesPage extends BasePage {
 
     public int getNonEmptyRowCount() {
         return (int) tableRows.stream().filter(r -> !r.getText().trim().isEmpty()).count();
-    }
-
-    // Columns rendered by DemoQA's web table: First Name, Last Name, Age, Email, Salary, Department, Action.
-    public String getCellText(int rowIndex, int colIndex) {
-        return tableRows.get(rowIndex).findElements(By.tagName("td")).get(colIndex).getText();
-    }
-
-    public boolean waitForExactCellText(int rowIndex, int colIndex, String expected) {
-        try {
-            wait.until(d -> expected.equals(getCellText(rowIndex, colIndex)));
-            return true;
-        } catch (TimeoutException e) {
-            return false;
-        }
     }
 }
